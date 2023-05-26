@@ -74,17 +74,38 @@ const menu = [
 ];
 //Traerse el div donde vamos a insertar la lista de menu
 const sectionCenter = document.querySelector(".section-center");
+const filterBtns = document.querySelectorAll(".filter-btn");
+//Añadir el evento para cada boton
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", function (e) {
+    const category = e.currentTarget.dataset.id;
+    //Queremos filtrar el menu por su categoria
+    const menuCategory = menu.filter((item) => {
+      return item.category === category;
+    });
+    console.log(menuCategory);
+    //Refrescar la página con el array filtrado
+    //Si category es all imprimo el menu entero
+    //sino imprimo el menu filtrado
+    if (category === "all") {
+      displayItemsMenu(menu);
+    } else {
+      displayItemsMenu(menuCategory);
+    }
+    console.log(e.currentTarget.dataset.id);
+  });
+});
 //Al terminar de cargaser el DOM insertamos todos los items de menu
 window.addEventListener("DOMContentLoaded", () => {
-    displayItemsMenu(menu);
+  displayItemsMenu(menu);
 });
 
-//Funcion que recorre el array menu y genera el codigo HTML 
+//Funcion que recorre el array menu y genera el codigo HTML
 //en funcion de la plantilla que nos han pasado con los datos
 //con los datos correspondientes de cada elemento del menu
-function displayItemsMenu(menuItems){
-    let displayMenu = menuItems.map((item)=>{
-        return `<article class="menu-item">
+function displayItemsMenu(menuItems) {
+  let displayMenu = menuItems.map((item) => {
+    return `<article class="menu-item">
                   <img src=${item.img} alt=${item.title} class="photo" />
                   <div class="item-info">
                   <header>
@@ -95,10 +116,9 @@ function displayItemsMenu(menuItems){
                       ${item.desc}
                   </p>
                   </div>
-                </article>`
-    })
-    displayMenu = displayMenu.join("<hr>");
-    console.log(displayMenu);
-    sectionCenter.innerHTML = displayMenu;
+                </article>`;
+  });
+  displayMenu = displayMenu.join("<hr>");
+  //console.log(displayMenu);
+  sectionCenter.innerHTML = displayMenu;
 }
-
