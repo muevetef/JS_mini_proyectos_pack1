@@ -71,34 +71,75 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 9,
+    title: "quarantine buddy",
+    category: "NewCategory",
+    price: 16.99,
+    img: "./images/item-9.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
 //Traerse el div donde vamos a insertar la lista de menu
 const sectionCenter = document.querySelector(".section-center");
-const filterBtns = document.querySelectorAll(".filter-btn");
-//Añadir el evento para cada boton
-filterBtns.forEach((btn) => {
-  btn.addEventListener("click", function (e) {
-    const category = e.currentTarget.dataset.id;
-    //Queremos filtrar el menu por su categoria
-    const menuCategory = menu.filter((item) => {
-      return item.category === category;
-    });
-    console.log(menuCategory);
-    //Refrescar la página con el array filtrado
-    //Si category es all imprimo el menu entero
-    //sino imprimo el menu filtrado
-    if (category === "all") {
-      displayItemsMenu(menu);
-    } else {
-      displayItemsMenu(menuCategory);
-    }
-    console.log(e.currentTarget.dataset.id);
-  });
-});
+const btnsContainer = document.querySelector(".btn-container");
+
 //Al terminar de cargaser el DOM insertamos todos los items de menu
 window.addEventListener("DOMContentLoaded", () => {
   displayItemsMenu(menu);
+  displayMenuButtons();
 });
+
+//Funcion que dibujara los botones. Uno para cada categoria existente
+//en el array menu
+function displayMenuButtons() {
+  //Crear un array con las categorias (unicas)
+  const categorias = menu.reduce(
+    (values, item) => {
+      if (!values.includes(item.category)) {
+        values.push(item.category);
+      }
+      return values; //No olvidarse el return
+    },
+    ["all"]
+  );
+  console.log(categorias);
+
+  //Generar los botonoes
+  const categoryButtons = categorias
+    .map((category) => {
+      return `<button type="button" class="filter-btn" data-id=${category}>${category}</button>`;
+    })
+    .join("");
+
+  console.log(categoryButtons);
+
+  //Insertamos los botones el el div correspondiente
+  btnsContainer.innerHTML = categoryButtons;
+  //Seleccionamos los botones
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  console.log(filterBtns);
+  //Añadir el evento para cada boton
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      const category = e.currentTarget.dataset.id;
+      //Queremos filtrar el menu por su categoria
+      const menuCategory = menu.filter((item) => {
+        return item.category === category;
+      });
+      console.log(menuCategory);
+      //Refrescar la página con el array filtrado
+      //Si category es all imprimo el menu entero
+      //sino imprimo el menu filtrado
+      if (category === "all") {
+        displayItemsMenu(menu);
+      } else {
+        displayItemsMenu(menuCategory);
+      }
+      console.log(e.currentTarget.dataset.id);
+    });
+  });
+}
 
 //Funcion que recorre el array menu y genera el codigo HTML
 //en funcion de la plantilla que nos han pasado con los datos
